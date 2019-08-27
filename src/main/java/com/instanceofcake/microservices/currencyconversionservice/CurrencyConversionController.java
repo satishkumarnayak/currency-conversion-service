@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bouncycastle.pqc.math.linearalgebra.BigEndianConversions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +16,8 @@ import org.springframework.web.client.RestTemplate;
 
 @RestController
 public class CurrencyConversionController {
+	
+	Logger logging = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	CurrencyExchangeProxy proxy;
@@ -24,6 +28,8 @@ public class CurrencyConversionController {
 			@PathVariable BigDecimal quantity) {
 
 		CurrencyConversionBean response = proxy.retrieveExchangeValue(from, to);
+		
+		logging.info("{}",response);
 
 		return new CurrencyConversionBean(response.getId(), from, to,
 				response.getConversionRate(), quantity,
